@@ -21,7 +21,7 @@ final public class EdgeQueryClient {
         this.scheduler = scheduler;
     }
 
-    public class ThenRequest<T>{
+    public class ThenRequest<V>{
 
         final private FlowBuilder flowBuilder;
         final private Node node;
@@ -33,15 +33,15 @@ final public class EdgeQueryClient {
         }
 
         public <R extends Request<S> ,S extends Response> ThenResponse<S> thenRequest(
-                @Nonnull RequestFactory<R, S, T> requestFactory) {
+                @Nonnull RequestFactory<R, S, V> requestFactory) {
 
             return EdgeQueryClient.this.request(flowBuilder, requestFactory);
         }
 
-        public T execute() throws ExecutionException, InterruptedException {
+        public V execute() throws ExecutionException, InterruptedException {
 
             //send RequestGraph;
-            return (T)EdgeQueryClient.this.dispatcher.dispatch(flowBuilder.build()).get();
+            return (V)EdgeQueryClient.this.dispatcher.dispatch(flowBuilder.build()).get();
         }
     }
 
@@ -67,6 +67,9 @@ final public class EdgeQueryClient {
     }
 
 
+    /**
+     * 发起单个异步请求
+     */
     @Nonnull
     public <R extends Request<S> , S extends Response>
     ThenResponse<S> request(@Nonnull RequestFactoryNonParam<R, S> requestFactory) {
@@ -74,6 +77,12 @@ final public class EdgeQueryClient {
         return request(flowBuilder, requestFactory);
     }
 
+    /**
+     * 发起
+     */
+    public ResultsFuture parallelRequests(ParallelRequestsFactory praReqFactory){
+
+    }
 
     @Nonnull
     private  <R extends Request<S> , S extends Response, T>
@@ -87,7 +96,7 @@ final public class EdgeQueryClient {
     }
 
     private void execute(){
-
+        //
     }
 
 }
